@@ -1,12 +1,12 @@
 from urllib.parse import urlencode
 from typing import Dict, Optional
 
-from pdf-notify.config.settings import (
+from config.settings import (
     SELECT, ORDER, LIMIT, BASE, CURSOR_FIELD
 )
-from pdf-notify.filters.filer_names import FILER_NAMES
-from pdf-notify.src.soql import in_list_clause
-from pdf-notify.config.credentials import SOCRATA_APP_TOKEN
+from filters.filer_names import FILER_NAMES
+from src.soql import in_list_clause
+from config.credentials import SOCRATA_APP_TOKEN
 
 def build_static_where() -> str:
     if not FILER_NAMES:
