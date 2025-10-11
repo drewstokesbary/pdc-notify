@@ -51,8 +51,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Ensure we're up to date, then add/commit if changed
-          git pull --rebase
+          # Stage the cursor.json file
           if git diff --quiet -- cursor.json; then
             echo "No cursor changes."
             exit 0
@@ -60,4 +59,4 @@ jobs:
 
           git add cursor.json
           git commit -m "Update cursor.json [skip ci]"
-          git push
+          git push origin HEAD:${BRANCH}
