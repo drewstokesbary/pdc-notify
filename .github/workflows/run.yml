@@ -55,11 +55,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # Stage the cursor.json file
-          if git diff --quiet -- cursor.json; then
+          if git diff --quiet -- state/cursor.json; then
             echo "No cursor changes."
             exit 0
           fi
 
-          git add cursor.json
+          git add state/cursor.json
           git commit -m "Update cursor.json [skip ci]"
           git push origin HEAD:${BRANCH}
