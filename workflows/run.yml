@@ -1,0 +1,25 @@
+name: Run main.py
+
+on:
+  push:                # Runs automatically when you push to any branch
+  workflow_dispatch:   # Also lets you run it manually from the Actions tab
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest   # GitHub provides a Linux runner VM
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies (optional)
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run main.py
+        run: python main.py
