@@ -19,6 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Log trigger and UTC time
+        run: |
+          echo "Triggered by: $GITHUB_EVENT_NAME"
+          date -u
+
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
