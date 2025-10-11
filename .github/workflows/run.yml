@@ -1,8 +1,15 @@
 name: Run main.py
 
+concurrency:
+  group: pdc-notify-run
+  cancel-in-progress: false   # a new run waits if one is already running
+
 on:
-  push:                # Runs automatically when you push to any branch
-  workflow_dispatch:   # Also lets you run it manually from the Actions tab
+  #push:                # Runs automatically when you push to any branch
+  workflow_dispatch:    # Also lets you run it manually from the Actions tab
+  schedule:             # Scheduled runs
+    - cron: "0 * * * *"
+
 
 jobs:
   run-script:
