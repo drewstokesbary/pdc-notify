@@ -4,12 +4,14 @@ from src.client import (
 )
 from src.query_params import build_preview_url
 from state.cursor import read_last_seen
+from src.matching import filter_records
+from src.render import render_preview
 
 def main() -> None:
     last_seen = read_last_seen()  # None on first run
     print("Preview URL:", build_preview_url(last_seen))
 
-    rows = fetch_page(limit=5, offset=0, last_seen=last_seen)
+    rows = fetch_page(limit=10, offset=0, last_seen=last_seen)
     print("Fetched rows:", len(rows))
     for i, row in enumerate(rows[:2], start=1):
         print(f"\nRow {i} preview:")
@@ -23,6 +25,9 @@ def main() -> None:
     print(f"\nTotal accumulated rows (test): {len(paged_rows)}")
     for i, row in enumerate(paged_rows[:2], start=1):
         print(f"  {i}. report_number={row.get('report_number')} filer_name={row.get('filer_name')}")
+    
+    matches = filter_records(rows)
+    print(render_preview(matches))
 
 if __name__ == "__main__":
     main()
