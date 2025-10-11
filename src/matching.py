@@ -1,6 +1,6 @@
 # src/matching.py
 from typing import Dict, List, Iterable
-from filters.filer_names import FILER_NAMES  # <- your standalone list
+from src.filer_names import FILER_NAMES  # <- your standalone list
 
 STRICT_NAME_MATCH = False  # flip to True to re-check filer_name in code
 FILER_NAME_SET = set(FILER_NAMES)

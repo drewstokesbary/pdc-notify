@@ -6,6 +6,7 @@ from src.query_params import build_preview_url
 from state.cursor import read_last_seen
 from src.matching import filter_records
 from src.render import render_preview
+from src.pipeline import process_new_records
 
 def main() -> None:
     last_seen = read_last_seen()  # None on first run
@@ -28,6 +29,8 @@ def main() -> None:
     
     matches = filter_records(rows)
     print(render_preview(matches))
+
+    process_new_records(limit=200)
 
 if __name__ == "__main__":
     main()

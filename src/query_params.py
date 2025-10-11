@@ -4,7 +4,7 @@ from typing import Dict, Optional
 from config.settings import (
     SELECT, ORDER, LIMIT, BASE, CURSOR_FIELD
 )
-from filters.filer_names import FILER_NAMES
+from src.filer_names import FILER_NAMES
 from src.soql import in_list_clause
 from config.credentials import SOCRATA_APP_TOKEN
 
@@ -13,21 +13,29 @@ def build_static_where() -> str:
         raise ValueError("Please populate FILER_NAMES with your target committees.")
     return in_list_clause("filer_name", FILER_NAMES)
 
-def build_params(last_seen: Optional[str] = None) -> Dict[str, str]:
+def build_cursor_where(last_seen: Optional[int]) -> str:
+    """
+    Combine static filer filter with the 'newer than last_seen' condition.
+    We match your existing behavior: cast to int, then compare as a quoted string.
+    """
+    base = build_static_where()
+    if last_seen:
+        return f"{base} AND {CURSOR_FIELD} > '{int(last_seen)}'"
+    return base
+
+def build_params(last_seen: Optional[int] = None) -> Dict[str, str]:
     """Build the SoQL params dict. Optionally append a cursor (> last_seen)."""
-    where_clauses = [build_static_where()]
-    if last_seen is not None:
-        where_clauses.append(f"{CURSOR_FIELD} > {last_seen}")
+    where = build_cursor_where(last_seen)
 
     params = {
         "$select": SELECT,
-        "$where": " AND ".join(where_clauses),
+        "$where": where,
         "$order": ORDER,
         "$limit": str(LIMIT),
     }
     return params
 
-def build_preview_url(last_seen: Optional[str] = None) -> str:
+def build_preview_url(last_seen: Optional[int] = None) -> str:
     q = build_params(last_seen)
     return f"{BASE}?{urlencode(q)}"
 
