@@ -4,8 +4,6 @@ from src.query_params import (
 from config.settings import BASE
 from state.cursor import read_last_seen
 
-print("Hello, World!")
-
 def main() -> None:
     last_seen = read_last_seen()  # None on first run
     params = build_params(last_seen=last_seen)
