@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Optional, Iterable, Dict, Any
 
-STATE_PATH = Path("state/state.json")
+STATE_PATH = Path("state/cursor.json")
 
 def read_last_seen(path: Path = STATE_PATH) -> Optional[int]:
     """Return last_seen_report_number if saved; otherwise None."""
