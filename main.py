@@ -1,8 +1,8 @@
-from pdc-notify.src.query_params import (
+from src.query_params import (
     build_params, build_preview_url, socrata_headers
 )
-from pdc-notify.config.settings import BASE
-from pdc-notify.state.cursor import read_last_seen
+from config.settings import BASE
+from state.cursor import read_last_seen
 
 print("Hello, World!")
 
