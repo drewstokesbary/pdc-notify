@@ -41,7 +41,7 @@ jobs:
       - name: Run main.py
         run: python main.py
 
-      - name: Commit updated cursor.json (if changed)
+      - name: Commit updated cursor.json (if changed) #updates cursor.json in repository
         run: |
           # optional: only allow on default branch to avoid loops
           BRANCH="${GITHUB_REF#refs/heads/}"
