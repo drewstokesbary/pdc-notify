@@ -7,6 +7,8 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # <-- allow pushing back
     steps:
       - uses: actions/checkout@v4
 
@@ -38,3 +40,24 @@ jobs:
 
       - name: Run main.py
         run: python main.py
+
+      - name: Commit updated cursor.json (if changed)
+        run: |
+          # optional: only allow on default branch to avoid loops
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "On branch: $BRANCH"
+
+          # Configure a committer identity
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Ensure we're up to date, then add/commit if changed
+          git pull --rebase
+          if git diff --quiet -- cursor.json; then
+            echo "No cursor changes."
+            exit 0
+          fi
+
+          git add cursor.json
+          git commit -m "Update cursor.json [skip ci]"
+          git push
