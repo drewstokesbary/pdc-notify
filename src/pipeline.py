@@ -19,7 +19,7 @@ def fetch_new_records(last_seen: Optional[int] = None, limit: int = LIMIT) -> Li
 
 def process_new_records(limit: int = 200) -> None:
     last_seen = read_last_seen()
-    print("Preview URL:", build_preview_url(last_seen))
+    #print("Preview URL:", build_preview_url(last_seen))
     print(f"Last seen report_number: {last_seen}")
 
     rows = fetch_new_records(last_seen=last_seen, limit=limit)
