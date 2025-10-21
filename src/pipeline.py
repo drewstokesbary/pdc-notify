@@ -3,7 +3,7 @@ from typing import List, Dict, Any, Optional
 
 from config.settings import LIMIT
 from src.client import fetch_page   # uses build_params under the hood
-from src.query_params import build_preview_url
+#from src.query_params import build_preview_url
 from state.cursor import read_last_seen, write_last_seen, safe_max_report
 from src.matching import filter_records
 from src.render import render_preview

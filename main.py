@@ -1,11 +1,11 @@
 # socrata_mailer/main.py
-from src.client import (
-    fetch_page, fetch_page_resilient, fetch_all_until_short_page
-)
-from src.query_params import build_preview_url
-from state.cursor import read_last_seen
-from src.matching import filter_records
-from src.render import render_preview
+#from src.client import (
+#    fetch_page, fetch_page_resilient, fetch_all_until_short_page
+#)
+#from src.query_params import build_preview_url
+#from state.cursor import read_last_seen
+#from src.matching import filter_records
+#from src.render import render_preview
 from src.pipeline import process_new_records
 
 def main() -> None:
