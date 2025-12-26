@@ -1,26 +1,21 @@
 # src/pipeline.py
+
 from typing import List, Dict, Any, Optional
 
 from config.settings import LIMIT
-from src.client import fetch_page   # uses build_params under the hood
-#from src.query_params import build_preview_url
-from state.cursor import read_last_seen, write_last_seen, safe_max_report
+from src.client import fetch_page
+from state.cursor import read_last_seen, write_last_seen, max_cursor, Cursor
 from src.matching import filter_records
 from src.render import render_preview
 from mail.compose import make_digest_message
 from mail.send import send_message
 
-def fetch_new_records(last_seen: Optional[int] = None, limit: int = LIMIT) -> List[Dict[str, Any]]:
-    """
-    Return rows newer than last_seen using the shared query builder.
-    """
-    # fetch_page uses build_params(last_seen=...) which uses our cursor WHERE
+def fetch_new_records(last_seen: Optional[Cursor] = None, limit: int = LIMIT) -> List[Dict[str, Any]]:
     return fetch_page(limit=limit, offset=0, last_seen=last_seen)
 
 def process_new_records(limit: int = 200) -> None:
     last_seen = read_last_seen()
-    #print("Preview URL:", build_preview_url(last_seen))
-    print(f"Last seen report_number: {last_seen}")
+    print(f"Last seen cursor: {last_seen}")
 
     rows = fetch_new_records(last_seen=last_seen, limit=limit)
     matches = filter_records(rows)
@@ -29,10 +24,8 @@ def process_new_records(limit: int = 200) -> None:
         print("No new matching records.")
         return
 
-    # Optional: console preview
     print(render_preview(matches))
 
-    # Build one email that lists all matches, one per line
     email_msg = make_digest_message(matches)
     if not email_msg.to:
         print("⚠️  DEFAULT_RECIPIENTS not set; skipping send.")
@@ -43,11 +36,11 @@ def process_new_records(limit: int = 200) -> None:
         print(f"Sent digest: {email_msg.subject}")
 
         # Advance cursor only after successful send — use ALL fetched rows
-        max_report = safe_max_report(rows)
-        if max_report is not None:
-            write_last_seen(max_report)
-            print("Updated cursor to:", max_report)
+        new_cursor = max_cursor(rows)
+        if new_cursor is not None:
+            write_last_seen(new_cursor)
+            print("Updated cursor to:", new_cursor)
         else:
-            print("No valid report_number found; cursor unchanged.")
+            print("No valid cursor fields found; cursor unchanged.")
     except Exception as e:
         print("Email send failed; cursor not advanced:", e)
