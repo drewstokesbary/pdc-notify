@@ -24,4 +24,4 @@ SELECT = ",".join(SELECT_FIELDS)
 # Use ASC so "max_cursor" is just the last/largest by (ts, tie).
 ORDER = "cursor_ts ASC, cursor_tie ASC"
 
-LIMIT = 10000
+LIMIT = 1000
