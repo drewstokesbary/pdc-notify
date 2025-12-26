@@ -30,7 +30,7 @@ def main() -> None:
     #matches = filter_records(rows) # part of old code, now in process_new_records()
     #print(render_preview(matches)) # part of old code, now in process_new_records()
 
-    process_new_records(limit=2000)
+    process_new_records(limit=10000)
 
 if __name__ == "__main__":
     main()
